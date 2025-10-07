@@ -54,7 +54,17 @@ export class ...
 # Frontend
 
 - TS + React
+
 - ReduxToolkit
+
 - NextJS
+
+  - npx create-next-app@latest [projName]
+
 - small SEO optimization
+
 - работа с аудио файлами
+
+- Material UI
+  - npm install @mui/material @emotion/react @emotion/styled
+  - npm install @mui/icons-material
