@@ -13,6 +13,7 @@ import { AlbumService } from './album.service'
 import { CreateAlbumDto } from './dto/create-album.dto'
 import mongoose from 'mongoose'
 import { FileFieldsInterceptor } from '@nestjs/platform-express'
+import { AddTrackDto } from './dto/add-track.dto'
 
 @Controller('/albums')
 export class AlbumController {
@@ -50,10 +51,7 @@ export class AlbumController {
   }
 
   @Post('/track')
-  addTrack(
-    @Param('id_track') idTrack: mongoose.Types.ObjectId,
-    @Param('id_album') idAlbum: mongoose.Types.ObjectId
-  ) {
-    return this.albumService.addTrack(idTrack, idAlbum)
+  addTrack(@Body() dto: AddTrackDto) {
+    return this.albumService.addTrack(dto)
   }
 }

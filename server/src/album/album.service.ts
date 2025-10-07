@@ -5,6 +5,7 @@ import { CreateAlbumDto } from './dto/create-album.dto'
 import mongoose, { Model } from 'mongoose'
 import { FileService, FileType } from 'src/file/file.service'
 import { Track, TrackDocument } from 'src/track/schemas/track.schema'
+import { AddTrackDto } from './dto/add-track.dto'
 
 @Injectable()
 export class AlbumService {
@@ -17,24 +18,35 @@ export class AlbumService {
   ) {}
 
   async create(dto: CreateAlbumDto, picture: string): Promise<Album> {
-    const picturePath = await this.fileService.createFile(
-      FileType.IMAGE,
-      picture
-    )
-    const album = await this.albumModel.create({
-      ...dto,
-      picture: picturePath,
-    })
-    return album
+    try {
+      const picturePath = await this.fileService.createFile(
+        FileType.IMAGE,
+        picture
+      )
+      const album = await this.albumModel.create({
+        ...dto,
+        picture: picturePath,
+      })
+      return album
+    } catch (error) {
+      console.log(error)
+    }
+    return {} as Album
   }
 
   async getAll(count: number = 10, offset: number = 0): Promise<Album[]> {
-    const albums = await this.albumModel
-      .find()
-      .skip(Number(offset))
-      .limit(Number(count))
+    try {
+      const albums = await this.albumModel
+        .find()
+        .skip(Number(offset))
+        .limit(Number(count))
 
-    return albums
+      return albums
+    } catch (error) {
+      console.log(error)
+    }
+
+    return []
   }
 
   async getOne(id: mongoose.Types.ObjectId): Promise<Album> {
@@ -42,37 +54,49 @@ export class AlbumService {
   }
 
   async delete(id: mongoose.Types.ObjectId): Promise<Album | string> {
-    const albums = await this.albumModel.findByIdAndDelete({ _id: id })
+    try {
+      const albums = await this.albumModel.findByIdAndDelete({ _id: id })
 
-    if (albums) return albums
+      if (albums) return albums
+    } catch (error) {
+      console.log(error)
+    }
 
     return 'запись не найдена'
   }
 
-  async addTrack(
-    idTrack: mongoose.Types.ObjectId,
-    idAlbum: mongoose.Types.ObjectId
-  ): Promise<Album | string> {
-    const album = await this.albumModel.findById(idAlbum)
+  async addTrack(dto: AddTrackDto): Promise<Album | string> {
+    try {
+      const album = await this.albumModel.findById(dto.idAlbum)
 
-    if (album) {
-      const track = await this.trackModel.create(idTrack)
+      if (album) {
+        const track = await this.trackModel.findById(dto.idTrack)
 
-      album.tracks.push(track._id)
-      await album.save()
+        if (track) {
+          album.tracks.push(track._id)
+          await album.save()
 
-      return album
+          return album
+        }
+      }
+    } catch (error) {
+      console.log(error)
     }
 
     return 'альбом не найден'
   }
 
   async search(query: string): Promise<Album[]> {
-    const albums = await this.albumModel.find({
-      // i - case insensitive
-      name: { $regex: new RegExp(query, 'i') },
-    })
+    try {
+      const albums = await this.albumModel.find({
+        // i - case insensitive
+        name: { $regex: new RegExp(query, 'i') },
+      })
 
-    return albums
+      return albums
+    } catch (error) {
+      console.log(error)
+    }
+    return []
   }
 }
