@@ -1,30 +1,30 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import mongoose, { HydratedDocument } from 'mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
+import mongoose, { HydratedDocument } from 'mongoose'
 
-export type TrackDocument = HydratedDocument<Track>;
+export type TrackDocument = HydratedDocument<Track>
 
 @Schema()
 export class Track {
   @Prop()
-  name: string;
+  name: string
 
   @Prop()
-  artist: string;
+  artist: string
 
   @Prop()
-  text: string;
+  text: string
 
   @Prop()
-  listens: number;
+  listens: number
 
   @Prop()
-  pictures: string;
+  picture: string
 
   @Prop()
-  audio: string;
+  audio: string
 
-  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }] })
-  comments: Comment[];
+  @Prop({ type: [{ type: mongoose.Types.ObjectId, ref: 'Comment' }] })
+  comments: mongoose.Types.ObjectId[]
 }
 
-export const TrackSchema = SchemaFactory.createForClass(Track);
+export const TrackSchema = SchemaFactory.createForClass(Track)

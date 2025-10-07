@@ -1,22 +1,22 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import mongoose, { HydratedDocument } from 'mongoose';
-import { Track } from 'src/track/schemas/track.schema';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
+import mongoose, { HydratedDocument } from 'mongoose'
+import { Track } from 'src/track/schemas/track.schema'
 
-export type AlbumDocument = HydratedDocument<Album>;
+export type AlbumDocument = HydratedDocument<Album>
 
 @Schema()
 export class Album {
   @Prop()
-  name: string;
+  name: string
 
   @Prop()
-  author: string;
+  author: string
 
   @Prop()
-  pictures: string;
+  picture: string
 
-  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Track' }] })
-  traks: Track[];
+  @Prop({ type: [{ type: mongoose.Types.ObjectId, ref: 'Track' }] })
+  tracks: mongoose.Types.ObjectId[]
 }
 
-export const AlbumSchema = SchemaFactory.createForClass(Album);
+export const AlbumSchema = SchemaFactory.createForClass(Album)
